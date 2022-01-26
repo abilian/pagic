@@ -3,10 +3,12 @@ from typing import Any
 from devtools import debug
 from flask import render_template, request, url_for
 from werkzeug.exceptions import MethodNotAllowed
+from typing import Sequence
 
 # from app.flask.lib.view_model import unwrap
 # from app.services.json_ld import to_json_ld
 # from app.services.opengraph import to_opengraph
+# from pagic import url_for
 
 PAGES = {}
 
@@ -25,12 +27,36 @@ class Page:
     __all__pages__ = {}
 
     name: str
+    endpoint: str
     label: str
-    path: str
-    template: str
-    layout: str
+    path: str | None = None
+    layout: str = ""
+    menu: str = ""
     parent: Any = None
+    children: Sequence = []
     args: dict = {}
+    path_args: dict = {}
+    query_args: dict = {}
+    form_data: dict = {}
+
+    @property
+    def template(self) -> str:
+        return f"pages/{self.name}.j2"
+
+    @property
+    def url(self):
+        args = {}
+        args.update(self.path_args)
+        args.update(self.query_args)
+        return url_for(self.endpoint, **args)
+
+    @property
+    def endpoint(self):
+        return self.name
+
+    @property
+    def label(self):
+        return self.name.capitalize()
 
     def context(self):
         """Override in subclasses."""
@@ -47,6 +73,9 @@ class Page:
         ctx = self.context()
         ctx.update(self.extra_context(ctx))
         content = self.content(ctx)
+        if not self.layout:
+            return content
+
         ctx["content"] = content
         return render_template(self.layout, **ctx)
 
@@ -104,20 +133,27 @@ class Page:
         return breadcrumbs
 
     @property
-    def url(self):
-        return url_for(f".{self.name}", **self.args)
-
-    @property
     def menu(self):
         return []
 
 
 class Route:
+    __name__ = "Route"
+
     def __init__(self, page_class):
         self.page_class = page_class
 
     def __call__(self, **kwargs):
-        page = self.page_class(**kwargs)
+        page = self.page_class()
+        page.path_args = kwargs
+        page.query_args = request.args
+        page.form_data = request.form
+
+        page.args = {}
+        page.args.update(page.query_args)
+        page.args.update(page.form_data)
+        page.args.update(page.path_args)
+
         method = request.method
         match method:
             case "GET":

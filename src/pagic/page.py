@@ -1,9 +1,8 @@
-from typing import Any
+from dataclasses import dataclass
+from typing import Any, Sequence
 
-from devtools import debug
 from flask import render_template, request, url_for
 from werkzeug.exceptions import MethodNotAllowed
-from typing import Sequence
 
 # from app.flask.lib.view_model import unwrap
 # from app.services.json_ld import to_json_ld
@@ -18,9 +17,15 @@ def fqdn(cls):
 
 
 def page(cls):
-    debug(f"@page called for page={cls}")
     Page.__all__pages__[fqdn(cls)] = cls
     return cls
+
+
+def expose(method):
+    if not hasattr(method, "_pagic_metadata"):
+        method._pagic_metadata = {}
+    method._pagic_metadata["exposed"] = True
+    return method
 
 
 class Page:
@@ -132,16 +137,14 @@ class Page:
         breadcrumbs.reverse()
         return breadcrumbs
 
-    @property
-    def menu(self):
-        return []
 
-
+@dataclass
 class Route:
     __name__ = "Route"
 
-    def __init__(self, page_class):
+    def __init__(self, page_class, method_name=""):
         self.page_class = page_class
+        self.method_name = method_name
 
     def __call__(self, **kwargs):
         page = self.page_class()
@@ -154,9 +157,38 @@ class Route:
         page.args.update(page.form_data)
         page.args.update(page.path_args)
 
-        method = request.method
-        match method:
+        if self.method_name:
+            return getattr(page, self.method_name)()
+
+        match request.method:
             case "GET":
                 return page.get()
             case "POST":
                 return page.post()
+
+    @property
+    def path(self):
+        page_class = self.page_class
+        if page_class.path.startswith("/"):
+            path = page_class.path
+        else:
+            path = "/" + page_class.path
+
+        if self.method_name:
+            return path + "/" + self.method_name
+        else:
+            return path
+
+    @property
+    def endpoint(self):
+        if self.method_name:
+            return self.page_class.name + "__" + self.method_name
+        else:
+            return self.page_class.name
+
+    # @property
+    # def __name__(self):
+    #     if self.method_name:
+    #         return self.page_class.__name__ + "__" + self.method_name
+    #     else:
+    #         return self.page_class.__name__

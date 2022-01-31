@@ -19,7 +19,7 @@ class HomePage(Page):
 def app():
     app = Flask(__name__)
     pagic = Pagic(app)
-    pagic.register_pages("tests")
+    pagic.register_roots([HomePage])
     return app
 
 

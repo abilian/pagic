@@ -1,9 +1,10 @@
 """Main module."""
+import types
+from collections import defaultdict
 
-from devtools import debug
-from flask import Flask, request, g
+from flask import Flask, g
 
-from pagic.page import Route
+from pagic.page import Page, Route
 from pagic.routing import url_for
 
 
@@ -20,7 +21,9 @@ class Pagic:
 
     def init_app(self, app: Flask):
         if "pagic" in app.extensions:
-            raise RuntimeError("This extension is already registered on this Flask app.")
+            raise RuntimeError(
+                "This extension is already registered on this Flask app."
+            )
 
         self.app = app
         app.extensions["pagic"] = self
@@ -30,20 +33,16 @@ class Pagic:
         app.template_global("url_for")(url_for)
 
     def before_request(self):
-        path = request.path
-        debug(path)
-        g.menus = {}
+        g.menus = defaultdict(list)
 
         for page_class in self.all_page_classes:
             menu_name = page_class.menu
             if not menu_name:
                 continue
 
-            if menu_name not in g.menus:
-                g.menus[menu_name] = []
-
-            endpoint = page_class.endpoint
-            label = page_class.label
+            page: Page = page_class()
+            endpoint = page.endpoint
+            label = page.label
             url = url_for(endpoint)
             menu_item = {
                 "label": label,
@@ -75,7 +74,7 @@ class Pagic:
         for page_class in roots:
             self.register_page(page_class)
 
-    def register_page(self, page_class, ancestors: list|None=None):
+    def register_page(self, page_class, ancestors: list | None = None):
         self.all_page_classes.append(page_class)
 
         if ancestors is None:
@@ -97,11 +96,43 @@ class Pagic:
             if p.path:
                 path_list.append(p.path)
         path = "/" + "/".join(path_list)
-        self.app.add_url_rule(path, page_class.name, route, methods=methods)
+        self.app.add_url_rule(path, route.endpoint, route, methods=methods)
 
         if hasattr(page_class, "children"):
             for child_class in page_class.children:
                 self.register_page(child_class, ancestors + [page_class])
+
+        # if hasattr(cls, "routes"):
+        #     for _route in cls.routes:
+        #         blueprint.add_url_rule(_route, route.endpoint, route, methods=methods)
+        #     return
+        #
+        # if not hasattr(cls, "path"):
+        #     cls.path = cls.name
+
+        # blueprint.add_url_rule(cls.path, route.endpoint, route, methods=methods)
+
+        for method_name in self.get_exposed_method_names(page_class):
+            route = Route(page_class, method_name)
+            self.app.add_url_rule(route.path, route.endpoint, route, methods=methods)
+
+    @staticmethod
+    def get_exposed_method_names(page_class):
+        result = []
+        for name, method in vars(page_class).items():
+            if not isinstance(method, types.FunctionType):
+                continue
+
+            if not hasattr(method, "_pagic_metadata"):
+                continue
+
+            metadata = method._pagic_metadata  # type: ignore
+            if not metadata.get("exposed"):
+                continue
+
+            result.append(name)
+
+        return result
 
     #
     # Old API

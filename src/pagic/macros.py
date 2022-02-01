@@ -1,6 +1,4 @@
-import importlib
-
-import venusian
+from pagic.scanner import scan_modules
 
 MACROS = []
 
@@ -11,8 +9,7 @@ def macro(f):
 
 
 def register_macros(app, path):
-    scanner = venusian.Scanner()
-    scanner.scan(importlib.import_module(path))
+    scan_modules(path)
 
     for macro in MACROS:
         app.template_global(macro.__name__)(macro)

@@ -60,6 +60,7 @@ pre-commit = "*"
 safety = "*"
 pytest-flask = "^1.2.0"
 devtools = "^0.8.0"
+poetryup = "^0.5.1"
 
 # Needed for some reason
 pyyaml = "*"

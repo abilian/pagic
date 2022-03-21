@@ -69,6 +69,8 @@ pyyaml = "*"
 restructuredtext_lint = "*"
 
 ## /standard cruft
+myst-parser = "^0.17.0"
+sphinx-book-theme = "^0.2.0"
 
 
 [tool.isort]

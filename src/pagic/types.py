@@ -1,3 +1,3 @@
-from typing import Any, Dict, List, Type, Union
+from typing import Any, Union
 
-JSON = Union[Dict[str, Any], List[Any], int, str, float, bool, Type[None]]
+JSON = Union[dict[str, Any], list[Any], int, str, float, bool, type[None]]

@@ -22,8 +22,10 @@ packages = [
 
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4"
+python = ">=3.9,<4"
 Flask = "^2.0.2"
+sourcetypes = "^0.0.2"
+cryptography = "^37.0.2"
 
 
 [tool.poetry.dev-dependencies]

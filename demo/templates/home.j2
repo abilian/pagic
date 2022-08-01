@@ -1,3 +1,20 @@
 <h1>Hello world</h1>
 
 <p>Yadda yadda.</p>
+
+<div class="container shadow-sm rounded-3 overflow-hidden">
+  <div class="row align-items-md-stretch">
+    <div class="col-md-6 text-white p-0 d-flex flex-column code-block">
+      <div class="pt-2 ps-3 text-muted small"><b>components.py</b></div>
+      <pre class="m-0"><code
+          class="p-2 ps-3 language-python small">{% include_source "reactive_components.txt" %}</code></pre>
+    </div>
+    <div class="col-md-6  bg-white">
+      <div class="h-100 p-4">
+
+        {{ demo.ReactiveSearch() }}
+
+      </div>
+    </div>
+  </div>
+</div>

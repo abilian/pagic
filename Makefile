@@ -33,7 +33,7 @@ test-all: test test-readme
 
 test: ## run tests quickly with the default Python
 	@echo "--> Running Python tests"
-	pytest --ff -x -p no:randomly
+	pytest -x -p no:randomly
 	@echo ""
 
 test-randomly:

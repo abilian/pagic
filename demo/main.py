@@ -14,7 +14,6 @@ class HomePage(Page):
     template = "home.j2"
 
 
-
 def main():
     app = Flask(__name__)
     pagic = Pagic(app)

@@ -1,26 +1,24 @@
 import pytest
+from devtools import debug
 from flask import Flask
 
-from pagic.page import Page, page
 from pagic.pagic import Pagic
-
-
-@page
-class HomePage(Page):
-    name = "home"
-    path = "/"
-    label = "Home"
-
-    layout = "tests/base.j2"
-    template = "tests/home.j2"
+from tests.pages.index import HomePage
 
 
 @pytest.fixture
 def app():
     app = Flask(__name__)
     pagic = Pagic(app)
-    pagic.register_roots([HomePage])
+    pagic.scan_pages("tests.pages")
     return app
+
+
+def test_pagic(app):
+    pagic = app.extensions["pagic"]
+    assert isinstance(pagic, Pagic)
+    assert pagic.app is app
+    assert pagic.all_page_classes == [HomePage]
 
 
 def test_home(app, client):
@@ -30,6 +28,5 @@ def test_home(app, client):
 
 
 if __name__ == "__main__":
-    _app = Flask(__name__)
-    pagic = Pagic(_app)
+    _app = app()
     _app.run()

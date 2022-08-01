@@ -2,10 +2,12 @@
 import types
 from collections import defaultdict
 
+from devtools import debug
 from flask import Flask, g
 
 from pagic.page import Page, Route
 from pagic.routing import url_for
+from pagic.scanner import scan_modules
 
 
 class Pagic:
@@ -31,6 +33,25 @@ class Pagic:
         app.before_request(self.before_request)
         app.context_processor(self.inject_extra_context)
         app.template_global("url_for")(url_for)
+
+    def scan_pages(self, module_name: str):
+        if not module_name:
+            app_name = self.app.name
+            module_name = app_name + ".pages"
+
+        def register_module(module):
+            for name, obj in module.__dict__.items():
+                if not isinstance(obj, type) or not issubclass(obj, Page):
+                    continue
+
+                page = obj
+                debug(page)
+                if not hasattr(page, "name") or not page.name:
+                    continue
+
+                self.register_page(page)
+
+        scan_modules(module_name, callback=register_module)
 
     def before_request(self):
         g.menus = defaultdict(list)

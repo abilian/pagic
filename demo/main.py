@@ -4,7 +4,6 @@ from pagic.page import page, Page
 from pagic.pagic import Pagic
 
 
-@page
 class HomePage(Page):
     name = "home"
     path = "/"

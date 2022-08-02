@@ -7,8 +7,8 @@ def h(*args, **kw):
 
 
 @h.register
-def h_list(l: list) -> str:
-    return "\n".join(l)
+def h_list(list_: list) -> str:
+    return "\n".join(list_)
 
 
 @h.register

@@ -40,7 +40,7 @@ class Pagic:
             module_name = app_name + ".pages"
 
         def register_module(module):
-            for name, obj in module.__dict__.items():
+            for obj in module.__dict__.values():
                 if not isinstance(obj, type) or not issubclass(obj, Page):
                     continue
 

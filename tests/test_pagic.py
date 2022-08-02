@@ -1,5 +1,4 @@
 import pytest
-from devtools import debug
 from flask import Flask
 
 from pagic.pagic import Pagic

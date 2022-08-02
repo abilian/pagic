@@ -1,8 +1,8 @@
 """Main module."""
 import types
 from collections import defaultdict
+from typing import cast
 
-from devtools import debug
 from flask import Flask, g
 
 from pagic.page import Page, Route
@@ -44,8 +44,7 @@ class Pagic:
                 if not isinstance(obj, type) or not issubclass(obj, Page):
                     continue
 
-                page = obj
-                debug(page)
+                page: Page = cast(Page, obj)
                 if not hasattr(page, "name") or not page.name:
                     continue
 

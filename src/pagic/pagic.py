@@ -116,6 +116,8 @@ class Pagic:
             if p.path:
                 path_list.append(p.path)
         path = "/" + "/".join(path_list)
+        path = path.replace("//", "/")
+
         self.app.add_url_rule(path, route.endpoint, route, methods=methods)
 
         if hasattr(page_class, "children"):

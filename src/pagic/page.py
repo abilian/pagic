@@ -36,9 +36,14 @@ class Page:
     label: str
     path: str | None = None
     layout: str = ""
+
+    # Menu metadata
     menu: str = ""
+    menu_order: int = 0
+
     parent: Any = None
     children: Sequence = []
+
     args: dict = {}
     path_args: dict = {}
     query_args: dict = {}

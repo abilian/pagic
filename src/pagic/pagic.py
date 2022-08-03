@@ -53,12 +53,14 @@ class Pagic:
         scan_modules(module_name, callback=register_module)
 
     def before_request(self):
-        g.menus = defaultdict(list)
+        menus = defaultdict(list)
 
         for page_class in self.all_page_classes:
             menu_name = page_class.menu
             if not menu_name:
                 continue
+
+            menu_order = page_class.menu_order
 
             page: Page = page_class()
             endpoint = page.endpoint
@@ -69,8 +71,14 @@ class Pagic:
                 "endpoint": endpoint,
                 "url": url,
                 "active": False,
+                "order": menu_order,
             }
-            g.menus[menu_name].append(menu_item)
+            menus[menu_name].append(menu_item)
+
+        for menu_name, menu_items in menus.items():
+            menus[menu_name] = sorted(menu_items, key=lambda x: x["order"])
+
+        g.menus = menus
 
     def inject_extra_context(self):
         return {

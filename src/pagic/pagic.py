@@ -1,7 +1,7 @@
 """Main module."""
 import types
 from collections import defaultdict
-from typing import cast
+from typing import cast, Any
 
 from flask import Flask, g
 
@@ -13,11 +13,11 @@ from pagic.scanner import scan_modules
 class Pagic:
     app: Flask | None
     roots: list
-    all_page_classes: list
+    all_page_classes: set
 
     def __init__(self, app: Flask | None = None):
         self.roots = []
-        self.all_page_classes = []
+        self.all_page_classes = set()
         if app is not None:
             self.init_app(app)
 
@@ -53,8 +53,10 @@ class Pagic:
         scan_modules(module_name, callback=register_module)
 
     def before_request(self):
-        menus = defaultdict(list)
+        g.menus = self.make_menus()
 
+    def make_menus(self):
+        menus = defaultdict(list)
         for page_class in self.all_page_classes:
             menu_name = page_class.menu
             if not menu_name:
@@ -74,13 +76,11 @@ class Pagic:
                 "order": menu_order,
             }
             menus[menu_name].append(menu_item)
-
         for menu_name, menu_items in menus.items():
             menus[menu_name] = sorted(menu_items, key=lambda x: x["order"])
+        return menus
 
-        g.menus = menus
-
-    def inject_extra_context(self):
+    def inject_extra_context(self) -> dict[str, Any]:
         return {
             "url_for": url_for,
             "pagic": self,
@@ -97,13 +97,16 @@ class Pagic:
     #
     # New registration API
     #
-    def register_roots(self, roots):
+    def register_roots(self, roots) -> None:
         self.roots = roots
         for page_class in roots:
             self.register_page(page_class)
 
-    def register_page(self, page_class, ancestors: list | None = None):
-        self.all_page_classes.append(page_class)
+    def register_page(self, page_class, ancestors: list | None = None) -> None:
+        if page_class in self.all_page_classes:
+            return
+
+        self.all_page_classes.add(page_class)
 
         if ancestors is None:
             ancestors = []

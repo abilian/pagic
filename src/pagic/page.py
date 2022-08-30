@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import Any, Sequence
+from typing import Sequence
 
 from flask import render_template, request, url_for
 from werkzeug.exceptions import MethodNotAllowed
@@ -41,8 +43,8 @@ class Page:
     menu: str = ""
     menu_order: int = 0
 
-    parent: Any = None
-    children: Sequence = []
+    parent: type[Page] | None = None
+    children: Sequence = ()
 
     args: dict = {}
     path_args: dict = {}

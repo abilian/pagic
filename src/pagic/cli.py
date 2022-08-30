@@ -1,7 +1,7 @@
 import click
 from flask.cli import with_appcontext
 
-from .jobs import Job
+from .job import Job
 
 
 #

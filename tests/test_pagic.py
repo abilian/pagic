@@ -17,7 +17,7 @@ def test_pagic(app):
     pagic = app.extensions["pagic"]
     assert isinstance(pagic, Pagic)
     assert pagic.app is app
-    assert pagic.all_page_classes == [HomePage]
+    assert pagic.all_page_classes == {HomePage}
 
 
 def test_home(app, client):

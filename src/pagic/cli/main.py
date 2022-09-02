@@ -1,5 +1,4 @@
 import glob
-from typing import Optional
 
 import rich
 from devtools import debug
@@ -17,9 +16,9 @@ def serve(scandir: str = "pages"):
     debug(scandir)
 
     app = Flask(__name__)
-    pagic = Pagic(app)
+    Pagic(app)
 
-    scanner = Scanner(app, scandir)
+    Scanner(app, scandir)
     return
     # app.run()
 
@@ -60,32 +59,6 @@ class Scanner:
         debug(route_path)
 
         # self.app.add_url_rule(route_path, route_path, lambda: render_file(path))
-
-
-# def scan(app, scandir):
-#     """Scan the `pages` directory."""
-#     rich.print(f"[green]Scanning {scandir} directory...[/green]")
-#
-#     files = glob.glob(f"{scandir}/**", recursive=True)
-#     for file in files:
-#         if file.endswith(".py"):
-#             register_python_module(app, file)
-#         elif file.endswith(".html"):
-#             register_python_module(app, file)
-#
-#
-# def register_python_module(app, path):
-#     route_path = file[len(scandir) :]
-#
-#     module_name = path[:-3].replace("/", ".")
-#     module = __import__(module_name)
-#     for name in module_name.split(".")[1:]:
-#         module = getattr(module, name)
-#     app.register_blueprint(module)
-#
-#
-# def register_html_file(app, path):
-#     app.add_url_rule(route_path, route_path, lambda: render_file(path))
 
 
 def render_file(path):

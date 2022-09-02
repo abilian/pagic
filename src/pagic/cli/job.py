@@ -1,7 +1,7 @@
 import click
 from flask.cli import with_appcontext
 
-from .job import Job
+from pagic.job import Job
 
 
 #

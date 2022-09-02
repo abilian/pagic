@@ -20,6 +20,9 @@ packages = [
 ]
 
 
+[tool.poetry.scripts]
+pagic = 'pagic.cli.main:cli'
+
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4"
@@ -27,14 +30,11 @@ python = ">=3.9,<4"
 Flask = "^2.0.2"
 sourcetypes = "^0.0.2"
 cryptography = "^37.0.2"
+rich = "^12.5.1"
 
 
 [tool.poetry.dev-dependencies]
 ## Standard cruft
-
-# Cruft (project templates management)
-cruft = "*"
-toml = "*"
 
 # Testing
 pytest = "*"
@@ -65,7 +65,6 @@ pre-commit = "*"
 safety = "*"
 pytest-flask = "^1.2.0"
 devtools = "^0.8.0"
-poetryup = "^0.5.1"
 
 # Needed for some reason
 pyyaml = "*"
@@ -74,6 +73,7 @@ pyyaml = "*"
 restructuredtext_lint = "*"
 
 ## /standard cruft
+
 myst-parser = "^0.17.0"
 sphinx-book-theme = "^0.2.0"
 

@@ -75,6 +75,7 @@ restructuredtext_lint = "*"
 
 ## /standard cruft
 
+# Doc
 myst-parser = "^0.18"
 sphinx-book-theme = "^0.2"
 

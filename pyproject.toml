@@ -11,8 +11,8 @@ classifiers=[
     'Intended Audience :: Developers',
     'Natural Language :: English',
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.8',
-    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
 ]
 packages = [
     { include = "pagic", from = "src" },
@@ -27,11 +27,11 @@ pagic = 'pagic.cli.main:cli'
 [tool.poetry.dependencies]
 python = ">=3.9,<4"
 
-Flask = "^2.0.2"
+Flask = "^2"
 sourcetypes = "^0.0.2"
-cryptography = "^37.0.2"
-rich = "^12.5.1"
-typer = "^0.6.1"
+cryptography = "^37"
+rich = "^12"
+typer = "^0.6"
 
 
 [tool.poetry.dev-dependencies]

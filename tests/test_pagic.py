@@ -5,7 +5,7 @@ from pagic.pagic import Pagic
 from tests.pages.index import HomePage
 
 
-@pytest.fixture
+@pytest.fixture()
 def app():
     app = Flask(__name__)
     pagic = Pagic(app)

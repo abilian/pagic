@@ -1,18 +1,14 @@
 from functools import singledispatch
 
 from flask import url_for as url_for_orig
-from werkzeug.routing import BuildError
+from werkzeug.routing import RoutingException
 
 from pagic import Page
 
 
 @singledispatch
 def url_for(obj, _ns="", **kw) -> str:
-    # print(f"Illegal argument for 'url_for': {obj} (type: {type(obj)})")
-    # return "#"
-
-    # Was:
-    raise BuildError(f"Illegal argument for 'url_for': {obj} (type: {type(obj)})")
+    raise RoutingException(f"Illegal argument for 'url_for': {obj} (type: {type(obj)})")
 
 
 @url_for.register

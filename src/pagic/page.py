@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Sequence
 
 from flask import render_template, request, url_for
 from werkzeug.exceptions import MethodNotAllowed
@@ -10,8 +10,6 @@ from werkzeug.exceptions import MethodNotAllowed
 # from app.services.json_ld import to_json_ld
 # from app.services.opengraph import to_opengraph
 # from pagic import url_for
-
-PAGES = {}
 
 
 def fqdn(cls):
@@ -31,11 +29,11 @@ def expose(method):
 
 
 class Page:
-    __all__pages__ = {}
+    __all__pages__: dict[str, type] = {}
 
     name: str
-    endpoint: str
-    label: str
+    # endpoint: str
+    # label: str
     path: str | None = None
     layout: str = ""
 
@@ -63,11 +61,11 @@ class Page:
         return url_for(self.endpoint, **args)
 
     @property
-    def endpoint(self):
+    def endpoint(self) -> str:
         return self.name
 
     @property
-    def label(self):
+    def label(self) -> str:
         return self.name.capitalize()
 
     def context(self):
@@ -167,11 +165,12 @@ class Route:
         if self.method_name:
             return getattr(page, self.method_name)()
 
-        match request.method:
-            case "GET":
-                return page.get()
-            case "POST":
-                return page.post()
+        if request.method == "GET":
+            return page.get()
+        elif request.method == "POST":
+            return page.post()
+        else:
+            raise MethodNotAllowed()
 
     @property
     def path(self):

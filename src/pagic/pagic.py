@@ -35,6 +35,8 @@ class Pagic:
         app.template_global("url_for")(url_for)
 
     def scan_pages(self, module_name: str):
+        assert self.app
+
         if not module_name:
             app_name = self.app.name
             module_name = app_name + ".pages"
@@ -129,6 +131,7 @@ class Pagic:
         path = "/" + "/".join(path_list)
         path = path.replace("//", "/")
 
+        assert self.app
         self.app.add_url_rule(path, route.endpoint, route, methods=methods)
 
         if hasattr(page_class, "children"):
@@ -159,7 +162,8 @@ class Pagic:
             if not hasattr(method, "_pagic_metadata"):
                 continue
 
-            metadata = method._pagic_metadata  # type: ignore
+            # noinspection PyUnresolvedReferences
+            metadata = method._pagic_metadata
             if not metadata.get("exposed"):
                 continue
 

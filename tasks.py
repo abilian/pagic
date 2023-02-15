@@ -1,7 +1,7 @@
 import re
 from pathlib import Path
 
-from invoke import task, Context
+from invoke import Context, task
 
 
 @task()

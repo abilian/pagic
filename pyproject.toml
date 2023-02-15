@@ -7,7 +7,7 @@ version = "0.2.2"
 homepage = "https://github.com/abilian/pagic"
 description = "Top-level package for Pagic."
 authors = ["Abilian SAS <sf@abilian.com>"]
-readme = "README.rst"
+readme = "README.md"
 classifiers=[
     'Development Status :: 2 - Pre-Alpha',
     'Intended Audience :: Developers',
@@ -80,4 +80,3 @@ exclude = [
     'tmp',
 ]
 include = ["src"]
-

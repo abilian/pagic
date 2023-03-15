@@ -37,11 +37,3 @@ def h_other(tag: str, *args, **kw):
             attrs[k] = v
 
     return f"<{tag}>{h(children)}</{tag}>"
-
-
-# TODO:
-
-# language=python
-"""
-
-"""

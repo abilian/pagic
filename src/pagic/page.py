@@ -6,11 +6,6 @@ from dataclasses import dataclass
 from flask import render_template, request, url_for
 from werkzeug.exceptions import MethodNotAllowed
 
-# from app.flask.lib.view_model import unwrap
-# from app.services.json_ld import to_json_ld
-# from app.services.opengraph import to_opengraph
-# from pagic import url_for
-
 
 def fqdn(cls):
     return f"{cls.__module__}.{cls.__name__}"

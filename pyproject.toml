@@ -8,7 +8,7 @@ homepage = "https://github.com/abilian/pagic"
 description = "Top-level package for Pagic."
 authors = ["Abilian SAS <sf@abilian.com>"]
 readme = "README.md"
-classifiers=[
+classifiers = [
     'Development Status :: 2 - Pre-Alpha',
     'Intended Audience :: Developers',
     'Natural Language :: English',
@@ -21,37 +21,30 @@ packages = [
     { include = "tests", format = "sdist" },
 ]
 
-
 [tool.poetry.scripts]
 pagic = 'pagic.cli.main:cli'
 
-
 [tool.poetry.dependencies]
-python = ">=3.9,<4"
-
+python = "^3.9"
 Flask = "^2"
 sourcetypes = "^0.0.2"
 cryptography = "^37"
 rich = "^12"
 typer = "0.6"
-
+defusedxml = "^0.7.1"
 
 [tool.poetry.dev-dependencies]
 ## Standard cruft
-abilian-devtools ="*"
-
+abilian-devtools = "*"
 # Other tools
 profilehooks = "*"
 pre-commit = "*"
 pytest-flask = "^1.2.0"
 devtools = "^0.10"
-
 # Needed for some reason
 pyyaml = "*"
 
 ## /standard cruft
-
-
 [tool.poetry.group.dev.dependencies]
 docformatter = "^1.5.1"
 invoke = "^2.0.0"
@@ -62,21 +55,12 @@ mkdocs-material = "^9.0.12"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-
 #
 # Linters and formatters
 #
-
 [tool.isort]
 profile = "black"
 
 [tool.pyright]
-exclude = [
-    '.nox',
-    'tests',
-    'sandbox',
-    'doc',
-    'scripts',
-    'tmp',
-]
+exclude = ['.nox', 'tests', 'sandbox', 'doc', 'scripts', 'tmp']
 include = ["src"]

@@ -64,6 +64,7 @@ clean-test:
 ## Check style and annotation
 lint:
 	adt all
+	mypy --show-error-codes --check-untyped-defs  src tests
 
 #
 # Formatting

@@ -1,4 +1,4 @@
-import glob
+from pathlib import Path
 
 import rich
 from devtools import debug
@@ -19,7 +19,6 @@ def serve(scandir: str = "pages"):
     Pagic(app)
 
     Scanner(app, scandir)
-    return
     # app.run()
 
 
@@ -37,11 +36,12 @@ class Scanner:
         """Scan the `pages` directory."""
         rich.print(f"[green]Scanning {self.scandir} directory...[/green]")
 
-        paths = glob.glob(f"{self.scandir}/**", recursive=True)
+        paths = Path(self.scandir).rglob("**")
+        # paths = glob.glob(f"{self.scandir}/**", recursive=True)
         for path in paths:
-            if path.endswith(".py"):
+            if path.suffix == ".py":
                 self.register_python_module(path)
-            elif path.endswith(".html"):
+            elif path.suffix == ".html":
                 self.register_html_file(path)
 
     def register_python_module(self, path):
@@ -61,9 +61,9 @@ class Scanner:
         # self.app.add_url_rule(route_path, route_path, lambda: render_file(path))
 
 
-def render_file(path):
-    with open(path) as f:
-        return f.read()
+# def render_file(path):
+#     with open(path) as f:
+#         return f.read()
 
 
 if __name__ == "__main__":

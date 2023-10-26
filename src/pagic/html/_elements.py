@@ -1,3 +1,8 @@
+"""HTML builder forked from xmlwitch.
+
+There is still room for improvement.
+"""
+
 import keyword
 from io import StringIO
 from xml.sax.saxutils import escape, quoteattr

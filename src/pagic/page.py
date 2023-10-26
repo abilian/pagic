@@ -1,10 +1,13 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from flask import render_template, request, url_for
 from werkzeug.exceptions import MethodNotAllowed
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 def fqdn(cls):

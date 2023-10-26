@@ -2,7 +2,7 @@ repos:
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     # Ruff version.
-    rev: 'v0.0.246'
+    rev: 'v0.1.2'
     hooks:
       - id: ruff
         # Respect `exclude` and `extend-exclude` settings.
@@ -12,7 +12,7 @@ repos:
         # exclude: (apps|demo|nua)
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
       - id: check-added-large-files
       - id: check-ast
@@ -47,6 +47,6 @@ repos:
 
 
   - repo: https://github.com/pycqa/flake8
-    rev: 6.0.0
+    rev: 6.1.0
     hooks:
       - id: flake8

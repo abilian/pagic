@@ -1,5 +1,7 @@
 from datetime import UTC, datetime
 
+from freezegun import freeze_time
+
 from pagic.html import h, html
 
 
@@ -13,6 +15,7 @@ def test_with_attrs():
     assert h("h1", {"class": "large"}, ["test", "toto"]) == "<h1>test\ntoto</h1>"
 
 
+@freeze_time("2012-03-14")
 def test_advanced():
     h = html()
     with h.html:
@@ -40,7 +43,8 @@ def test_advanced():
         " <body>\n"
         "  <h1>Hello world</h1>\n"
         "  <p>This is a paragraph.</p>\n"
-        "  <p>Today is 2023-03-15.</p>\n"
+        "  <p>Today is 2012-03-14.</p>\n"
+        "  <p>Happy Pi day!</p>\n"
         " </body>\n"
         "</html>"
     )
